@@ -637,7 +637,10 @@ class RefResolver(object):
         handlers=(),
         urljoin_cache=None,
         remote_cache=None,
+        id_of=_id_of,
     ):
+        self.id_of = id_of
+
         if urljoin_cache is None:
             urljoin_cache = lru_cache(1024)(urljoin)
         if remote_cache is None:
@@ -675,13 +678,13 @@ class RefResolver(object):
             `RefResolver`
         """
 
-        return cls(base_uri=id_of(schema), referrer=schema, *args, **kwargs)
+        return cls(base_uri=id_of(schema), referrer=schema, id_of=id_of, *args, **kwargs)
 
     def extract_store_subschemas(self):
         subschemas = dict()
         for base_id, schema in self.store.items():
             subschemas[base_id] = {
-                subschema[u"id"].lstrip(u'#'): subschema for subschema in _utils.subschemas(schema)
+                self.id_of(subschema).lstrip(u'#'): subschema for subschema in _utils.subschemas(schema, self.id_of)
             }
         return subschemas
 
@@ -771,7 +774,7 @@ class RefResolver(object):
 
         # First try looking up the fragment schema reference in the subschema_store.
         try:
-            return self.subschema_store[document[u'id']][fragment]
+            return self.subschema_store[self.id_of(document)][fragment]
         except (KeyError, LookupError, TypeError):
             pass
 
@@ -846,7 +849,7 @@ class RefResolver(object):
         if self.cache_remote:
             self.store[uri] = result
             self.subschema_store[uri] = {
-                subschema[u"id"].lstrip(u'#'): subschema for subschema in _utils.subschemas(result)
+                self.id_of(subschema).lstrip(u'#'): subschema for subschema in _utils.subschemas(result, self.id_of)
             }
         return result
 

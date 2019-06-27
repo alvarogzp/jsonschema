@@ -217,10 +217,10 @@ def uniq(container):
     return True
 
 
-def subschemas(schema, key=u'id'):
+def subschemas(schema, id_of):
     """
         Finds all explicitly identified (sub)schemas contained in the provided ``schema``, including the root schema.
-        The optional ``key`` parameter is to allow for easier interop between draft-03/04 and draft-06+.
+        The ``id_of`` parameter is to allow for easier interop between draft-03/04 and draft-06+.
 
         Arguments:
 
@@ -228,9 +228,9 @@ def subschemas(schema, key=u'id'):
 
                 The schema to extract all constituent (sub)schemas from.
 
-            key (str):
+            id_of (function):
 
-                The keyword used to define a URI reference for a schema. id for draft-03/04 and $id for draft-06+.
+                A function to retrieve the URI reference of an schema.
 
         Returns:
 
@@ -240,17 +240,17 @@ def subschemas(schema, key=u'id'):
     schemas = list()
     if not isinstance(schema, dict):
         return schemas
-    schema_id = schema.get(key, None)
-    if schema_id is not None and isinstance(schema_id, str_types):
+    schema_id = id_of(schema)
+    if schema_id is not None and isinstance(schema_id, str_types) and len(schema_id) > 0:
         schemas.append(schema)
     for key, value in schema.items():
         # Recurse if the value is a dictionary.
         if isinstance(value, dict):
-            schemas.extend(subschemas(value))
+            schemas.extend(subschemas(value, id_of))
         # Check all list members. We don't have to worry about iterables due to raw schema type mapping.
         if isinstance(value, list):
             for item in value:
                 # Recurse if the value is a dictionary.
                 if isinstance(item, dict):
-                    schemas.extend(subschemas(item))
+                    schemas.extend(subschemas(item, id_of))
     return schemas
