@@ -1702,7 +1702,7 @@ class TestRefResolver(SynchronousTestCase):
             self.assertEqual(resolved, schema)
 
     def test_cache_remote_on(self):
-        response = [object()]
+        response = [{}]
 
         def handler(url):
             try:
@@ -1720,7 +1720,7 @@ class TestRefResolver(SynchronousTestCase):
             pass
 
     def test_cache_remote_off(self):
-        response = [object()]
+        response = [{}]
 
         def handler(url):
             try:
