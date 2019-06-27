@@ -16,7 +16,7 @@ If you're going to use this suite, you need to know how tests are laid out. The
 tests are contained in the `tests` directory at the root of this repository.
 
 Inside that directory is a subdirectory for each draft or version of the
-schema. We'll use `draft3` as an example.
+schema.
 
 If you look inside the draft directory, there are a number of `.json` files,
 which logically group a set of test cases together. Often the grouping is by
@@ -52,13 +52,23 @@ they should be valid or invalid.
 Coverage
 --------
 
-Draft 3 and 4 should have full coverage. If you see anything missing or think
-there is a useful test missing, please send a pull request or open an issue.
+Drafts 03, 04, 06, and 07 should have full coverage, with drafts 06 and 07
+being considered current and actively supported.  Bug fixes will be made as
+needed for draft-04 as it is still the most widely used, while draft-03
+is long since deprecated.
+
+If you see anything missing from the current supported drafts, or incorrect
+on any draft still accepting bug fixes, please file an issue or submit a PR.
 
 Who Uses the Test Suite
 -----------------------
 
 This suite is being used by:
+
+### Clojure ###
+
+* [json-schema](https://github.com/tatut/json-schema)
+* [JSON Schema for Clojure(Script) (JUXT)](https://github.com/juxt/json-schema)
 
 ### Coffeescript ###
 
@@ -95,6 +105,7 @@ This suite is being used by:
 * [json-schema-validator](https://github.com/daveclayton/json-schema-validator)
 * [everit-org/json-schema](https://github.com/everit-org/json-schema)
 * [networknt/json-schema-validator](https://github.com/networknt/json-schema-validator)
+* [Justify](https://github.com/leadpony/justify)
 
 ### JavaScript ###
 
@@ -132,9 +143,15 @@ for more information.
 * [json-schema](https://github.com/justinrainbow/json-schema)
 * [json-guard](https://github.com/thephpleague/json-guard)
 
+### PostgreSQL ###
+
+* [postgres-json-schema](https://github.com/gavinwahl/postgres-json-schema)
+* [is_jsonb_valid](https://github.com/furstenheim/is_jsonb_valid)
+
 ### Python ###
 
 * [jsonschema](https://github.com/Julian/jsonschema)
+* [fastjsonschema](https://github.com/seznam/python-fastjsonschema)
 
 ### Ruby ###
 
@@ -147,15 +164,6 @@ for more information.
 ### Swift ###
 
 * [JSONSchema](https://github.com/kylef/JSONSchema.swift)
-
-### Clojure ###
-
-* [json-schema](https://github.com/tatut/json-schema)
-
-### PostgreSQL ###
-
-* [postgres-json-schema](https://github.com/gavinwahl/postgres-json-schema)
-* [is_jsonb_valid](https://github.com/furstenheim/is_jsonb_valid)
 
 If you use it as well, please fork and send a pull request adding yourself to
 the list :).

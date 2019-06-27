@@ -3,6 +3,8 @@ import itertools
 import pprint
 import textwrap
 
+import attr
+
 from jsonschema import _utils
 from jsonschema.compat import PY3, iteritems
 
@@ -136,8 +138,27 @@ class SchemaError(_Error):
     _word_for_instance_in_error_message = "schema"
 
 
+@attr.s(hash=True)
 class RefResolutionError(Exception):
-    pass
+
+    _cause = attr.ib()
+
+    def __str__(self):
+        return str(self._cause)
+
+
+class UndefinedTypeCheck(Exception):
+    def __init__(self, type):
+        self.type = type
+
+    def __unicode__(self):
+        return "Type %r is unknown to this type checker" % self.type
+
+    if PY3:
+        __str__ = __unicode__
+    else:
+        def __str__(self):
+            return unicode(self).encode("utf-8")
 
 
 class UnknownType(Exception):
@@ -216,7 +237,7 @@ class ErrorTree(object):
         If the index is not in the instance that this tree corresponds to and
         is not known by this tree, whatever error would be raised by
         ``instance.__getitem__`` will be propagated (usually this is some
-        subclass of :class:`LookupError`.
+        subclass of `exceptions.LookupError`.
 
         """
 
@@ -237,7 +258,7 @@ class ErrorTree(object):
 
     def __len__(self):
         """
-        Same as :attr:`total_errors`.
+        Same as `total_errors`.
 
         """
 
