@@ -1755,6 +1755,25 @@ class TestRefResolver(SynchronousTestCase):
             resolver.pop_scope()
         self.assertIn("Failed to pop the scope", str(exc.exception))
 
+    def test_location_independent_identifier_is_resolved_properly(self):
+        foo_schema = {"id": "#foo"}
+        root_schema = {
+            "definitions": {
+                "foo": foo_schema
+            },
+            "properties": {
+                "test": {
+                    "$ref": "#foo"
+                }
+            }
+        }
+        resolver = validators.RefResolver.from_schema(
+            root_schema,
+            id_of=lambda schema: schema.get(u"id", u""),
+        )
+        with resolver.resolving("#foo") as resolved:
+            self.assertEqual(resolved, foo_schema)
+
 
 def sorted_errors(errors):
     def key(error):
